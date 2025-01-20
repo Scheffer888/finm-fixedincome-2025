@@ -676,7 +676,7 @@ def process_wrds_treasury_data(rawdata,keys_extra=[]):
 
 
     ### duration
-    data['duration'] *= 365
+    data['duration'] /= 365
     data['total size'] *= 1e6
     data['public size'] *= 1e6
     
