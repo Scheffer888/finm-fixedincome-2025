@@ -47,12 +47,12 @@ PIPELINE_DEV_MODE = env_config("PIPELINE_DEV_MODE", default=True, cast=bool)
 PIPELINE_THEME = env_config("PIPELINE_THEME", default="pipeline")
 
 ## Paths
-DATA_DIR = if_relative_make_abs(env_config('DATA_DIR', default=Path('_data'), cast=Path))
+DATA_DIR = if_relative_make_abs(env_config('DATA_DIR', default=Path('data'), cast=Path))
 #RAW_DATA_DIR = Path(DATA_DIR / "raw")
 #PROCESSED_DATA_DIR = Path(DATA_DIR / "processed")
 #MANUAL_DATA_DIR = if_relative_make_abs(env_config('MANUAL_DATA_DIR', default=Path('data_manual'), cast=Path))
 #LOG_DIR = if_relative_make_abs(env_config('LOG_DIR', default=Path('logs'), cast=Path))
-OUTPUT_DIR = if_relative_make_abs(env_config('OUTPUT_DIR', default=Path('_output'), cast=Path))
+OUTPUT_DIR = if_relative_make_abs(env_config('OUTPUT_DIR', default=Path('output'), cast=Path))
 #PUBLISH_DIR = if_relative_make_abs(env_config('PUBLISH_DIR', default=Path('_output/publish'), cast=Path))
 
 # Plot settings
