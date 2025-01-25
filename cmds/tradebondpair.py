@@ -13,7 +13,7 @@ sys.path.insert(0, '../cmds')
 from treasury_cmds import *
 
 def get_spread_bps(database):
-    ylds = database.pivot_table(index='CALDT',columns='KYTREASNO',values='TDYLD')
+    ylds = database.pivot_table(index='caldt',columns='kytreasno',values='tdyld')
     ylds *= 365 * 100 * 100
     
     spread = -ylds.sub(ylds.iloc[:,0],axis=0)
@@ -34,17 +34,18 @@ def get_key_info(info):
 
 def get_snapshot(database,date):    
     
-    datasnap = database[database['CALDT']==date].T
+
+    datasnap = database[database['caldt']==date].T
     
-    metrics = datasnap.loc[['KYTREASNO','CALDT','TDBID','TDASK','TDACCINT']]
-    metrics.loc['clean price'] = (metrics.loc['TDBID'] + metrics.loc['TDASK'])/2
-    metrics.loc['dirty price'] = metrics.loc['clean price'] + metrics.loc['TDACCINT']
-    metrics.loc['duration'] = datasnap.loc['TDDURATN'] / 365.25
-    ytm = (datasnap.loc['TDYLD'] * 365.25)
+    metrics = datasnap.loc[['kytreasno','caldt','tdbid','tdask','tdaccint']]
+    metrics.loc['clean price'] = (metrics.loc['tdbid'] + metrics.loc['tdask'])/2
+    metrics.loc['dirty price'] = metrics.loc['clean price'] + metrics.loc['tdaccint']
+    metrics.loc['duration'] = datasnap.loc['tdduratn'] / 365.25
+    ytm = (datasnap.loc['tdyld'] * 365.25)
     metrics.loc['modified duration'] = metrics.loc['duration'] / (1+ytm/2)
     metrics.loc['ytm'] = ytm
-    metrics.columns = metrics.loc['CALDT']
-    metrics.drop('CALDT',inplace=True)
+    metrics.columns = metrics.loc['caldt']
+    metrics.drop('caldt',inplace=True)
     metrics.index = metrics.index.str.lower()
     metrics.rename({'tdbid':'bid','tdask':'ask','tdaccint':'accrued interest'},inplace=True)
     
@@ -99,7 +100,7 @@ def trade_balance_sheet(prices, durations, haircuts, key_long, key_short, long_e
 
 
 def trade_evolution(date0, date_maturity, n_weeks, balsheet, price_ts, duration_ts, financing, cpn_rates, key_long, key_short):
-    
+
     dt0 = datetime.datetime.strptime(date0,'%Y-%m-%d') 
     
     cpn_dates = get_coupon_dates(date0,date_maturity)

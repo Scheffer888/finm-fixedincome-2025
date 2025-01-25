@@ -524,9 +524,6 @@ def pv(rate, cashflows, maturities,freq=1):
     price = sum([cfi/(1+rate/freq)**(maturities[i]*freq) for i, cfi in enumerate(cashflows)])
     return price
 
-
-
-
 def bootstrap_spot_rates(df):
     """
     Bootstraps spot rates from a dataframe of bond information.
@@ -719,14 +716,7 @@ def process_wrds_treasury_data(rawdata,keys_extra=[]):
     return data            
 
 
-
-
-
-
-
 from pandas.tseries.offsets import DateOffset
-
-
 
 
 def select_maturities(rawdata,periods=20,freq='6ME'):
