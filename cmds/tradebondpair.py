@@ -34,6 +34,7 @@ def get_key_info(info):
 
 def get_snapshot(database,date):    
     
+
     datasnap = database[database['caldt']==date].T
     
     metrics = datasnap.loc[['kytreasno','caldt','tdbid','tdask','tdaccint']]
