@@ -13,7 +13,9 @@ sys.path.insert(0, '../cmds')
 from treasury_cmds import *
 
 def get_spread_bps(database):
-    ylds = database.pivot_table(index='caldt',columns='kytreasno',values='tdyld')
+    dtb = database.copy()
+    dtb.columns = dtb.columns.str.lower()
+    ylds = dtb.pivot_table(index='caldt',columns='kytreasno',values='tdyld')
     ylds *= 365 * 100 * 100
     
     spread = -ylds.sub(ylds.iloc[:,0],axis=0)
@@ -21,6 +23,7 @@ def get_spread_bps(database):
     return spread
 
 def get_key_info(info):
+
     keys = ['kytreasno','tdatdt','tmatdt','tcouprt','itype']
     key_info = info.loc[keys]
     key_info.index = ['kytreasno','issue date','maturity date','coupon rate','type']
@@ -34,7 +37,6 @@ def get_key_info(info):
 
 def get_snapshot(database,date):    
     
-
     datasnap = database[database['caldt']==date].T
     
     metrics = datasnap.loc[['kytreasno','caldt','tdbid','tdask','tdaccint']]
@@ -53,8 +55,11 @@ def get_snapshot(database,date):
 
 def get_table(info,database,date):
 
+    dtb = database.copy()
+    dtb.columns = dtb.columns.str.lower()
+
     keyinfo = get_key_info(info)
-    metrics = get_snapshot(database,date)
+    metrics = get_snapshot(dtb,date)
 
     table = pd.merge(keyinfo.T,metrics.T,on='kytreasno',how='inner').T
     table.columns = table.loc['kytreasno']
